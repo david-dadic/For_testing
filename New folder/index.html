@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCET CSE PYQ Hub</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root { --primary: #0d47a1; --secondary: #1976d2; --bg: #f5f7fa; }
+  body { font-family: 'Poppins', sans-serif; margin:0; background:var(--bg); color:#333; }
+  header { background:var(--primary); color:white; padding:20px; text-align:center; }
+  header h1 { margin:0; font-size:28px; }
+  .hero { padding:40px 20px; text-align:center; background:linear-gradient(135deg,var(--primary),var(--secondary)); color:white; }
+  .search-bar { margin-top:20px; }
+  .search-bar input, .search-bar select { padding:10px; margin:5px; border-radius:8px; border:none; width:200px; }
+  .filters { display:flex; justify-content:center; flex-wrap:wrap; padding:20px; gap:10px; }
+  .pyq-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; padding:20px; }
+  .card { background:white; padding:20px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); transition:0.3s; }
+  .card:hover { transform:translateY(-5px); }
+  .btn { background:var(--secondary); color:white; padding:10px 15px; border:none; border-radius:8px; cursor:pointer; text-decoration:none; display:inline-block; }
+  .upload-section { background:white; margin:20px; padding:20px; border-radius:12px; }
+  footer { background:var(--primary); color:white; text-align:center; padding:15px; margin-top:30px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1><i class="fa-solid fa-book"></i> SCET CSE PYQ Hub</h1>
+  <p>Previous Year Question Papers - All in One Place</p>
+</header>
+
+<section class="hero">
+  <h2>Download Sessional & Semester PYQs Easily</h2>
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Search Subject...">
+    <select id="semester"><option value="">All Semesters</option></select>
+    <select id="examType"><option value="">All Exams</option></select>
+  </div>
+</section>
+
+<section class="filters">
+  <button class="btn" onclick="showUpload()"><i class="fa-solid fa-upload"></i> Upload PYQ</button>
+</section>
+
+<div id="uploadForm" class="upload-section" style="display:none;">
+  <h3>Upload New PYQ</h3>
+  <input type="text" id="upSubject" placeholder="Subject Name">
+  <input type="number" id="upSem" placeholder="Semester">
+  <input type="text" id="upYear" placeholder="Year">
+  <select id="upType"><option>Sessional 1</option><option>Sessional 2</option><option>Internal</option><option>Semester</option></select>
+  <input type="file" id="upFile" accept=".pdf">
+  <button class="btn" onclick="uploadPYQ()">Upload</button>
+</div>
+
+<section class="pyq-grid" id="pyqGrid"></section>
+
+<section style="padding:20px;">
+  <h2>About SCET CSE PYQ Hub</h2>
+  <p>This portal is made for SCET CSE students to access all previous year sessional, internal and semester question papers. Practice more, score better!</p>
+  <h3>How to Use:</h3>
+  <p>1. Select Semester and Exam Type 2. Search Subject 3. Click Download</p>
+</section>
+
+<footer>
+  <p>Made with ❤️ for SCET CSE Students | © 2026 SCET PYQ Hub</p>
+</footer>
+
+<script>
+let pyqs = JSON.parse(localStorage.getItem('pyqs')) || [
+  {subject:"Data Structures", sem:3, year:"2023", type:"Sessional 1", link:"#"},
+  {subject:"DBMS", sem:4, year:"2024", type:"Internal", link:"#"},
+  {subject:"OOP", sem:3, year:"2022", type:"Semester", link:"#"},
+  {subject:"Digital Logic", sem:2, year:"2023", type:"Sessional 2", link:"#"}
+];
+
+function renderPYQs() {
+  let grid = document.getElementById('pyqGrid');
+  grid.innerHTML = '';
+  pyqs.forEach(p => {
+    grid.innerHTML += `
+    <div class="card">
+      <h3>${p.subject}</h3>
+      <p><b>Semester:</b> ${p.sem} | <b>Year:</b> ${p.year}</p>
+      <p><b>Exam:</b> ${p.type}</p>
+      <a href="${p.link}" class="btn"><i class="fa-solid fa-download"></i> Download PDF</a>
+    </div>`;
+  });
+}
+
+function showUpload() {
+  document.getElementById('uploadForm').style.display = 'block';
+}
+
+function uploadPYQ() {
+  let newPYQ = {
+    subject: document.getElementById('upSubject').value,
+    sem: document.getElementById('upSem').value,
+    year: document.getElementById('upYear').value,
+    type: document.getElementById('upType').value,
+    link: "#"
+  };
+  pyqs.push(newPYQ);
+  localStorage.setItem('pyqs', JSON.stringify(pyqs));
+  renderPYQs();
+  alert('PYQ Uploaded Successfully!');
+}
+
+renderPYQs();
+</script>
+</body>
+</html>
